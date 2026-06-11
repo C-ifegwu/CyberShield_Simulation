@@ -8,6 +8,7 @@ public class RaycastInteraction : MonoBehaviour
     [Header("Raycast Settings")]
     public float interactDistance = 5f; // How far the laser reaches
     public Camera mainCamera; // Where the laser shoots from
+    public ScenarioManager scenarioManager; // Reference to the Scenario Manager
 
     private void Awake()
     {
@@ -35,8 +36,8 @@ public class RaycastInteraction : MonoBehaviour
             // 4. Did the object we hit have the "Interactable" tag?
             if (hit.collider.CompareTag("Interactable"))
             {
-                Debug.Log("SUCCESS! You clicked on the " + hit.collider.gameObject.name);
-                // In Phase 4, we will replace this Debug log with the code to open the UI smartphone screen!
+                // 5. Open the Scenario UI!
+                scenarioManager.OpenSextortionScenario();
             }
         }
     }
