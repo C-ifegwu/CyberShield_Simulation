@@ -14,6 +14,9 @@ public class ScenarioManager : MonoBehaviour
     [Header("Player Reference")]
     public FirstPersonController playerController;
 
+    [Header("Hologram Reference")]
+    public RiskPathManager riskPath; // Reference to the Risk Path Manager to tell it which way to draw the line based on player choices
+
     // This gets called by our Raycast script!
     public void OpenSextortionScenario()
     {
@@ -47,7 +50,8 @@ public class ScenarioManager : MonoBehaviour
     {
         Debug.Log("Choice selected! Score changed by: " + scoreChange);
         
-        // Phase 5: This is where we will tell the Line Renderer to draw a path!
+        // Phase 5: This is where we tell the Line Renderer to draw a path!
+        riskPath.AddDecisionPoint(scoreChange); // <--- WE ADDED THIS FOR PHASE 5!
         
         CloseScenario();
     }
