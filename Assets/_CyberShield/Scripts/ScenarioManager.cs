@@ -1,66 +1,114 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections; // Required for the Typewriter effect
 
 public class ScenarioManager : MonoBehaviour
 {
     [Header("UI Elements")]
     public GameObject phoneScreenUI;
-    public TextMeshProUGUI scenarioText;
-    public Button button1;
-    public Button button2;
-    public Button button3;
+    public TextMeshProUGUI senderNameText;
+    public TextMeshProUGUI messageText;
+    public Button[] choiceButtons; // Array to hold our 3 buttons
 
-    [Header("Player Reference")]
+    [Header("Player & World References")]
     public FirstPersonController playerController;
+    public RiskPathManager riskPath;
+    
+    [Header("The Story Nodes")]
+    public StoryNode[] storyNodes; // This holds our entire branching story!
+    
+    private int currentScore = 0;
 
-    [Header("Hologram Reference")]
-    public RiskPathManager riskPath; // Reference to the Risk Path Manager to tell it which way to draw the line based on player choices
-
-    // This gets called by our Raycast script!
-    public void OpenSextortionScenario()
+    // Triggered by the Raycast!
+    public void StartStory(int startingNodeIndex)
     {
-        // 1. Show the UI
-        phoneScreenUI.SetActive(true);
-        
-        // 2. Set the scenario text
-        scenarioText.text = "Unknown Number:\n'Send me money right now or I will leak your private photos to your entire contact list.'";
-        
-        // 3. Set up the buttons (Button, Text, Score Change)
-        SetupButton(button1, "Pay them the money", -10);
-        SetupButton(button2, "Block and Report", 20);
-        SetupButton(button3, "Tell a trusted adult", 30);
+        // THE FIX: If the phone UI is already open, ignore the laser pointer!
+        if (phoneScreenUI.activeInHierarchy) return; 
 
-        // 4. Unlock the mouse cursor so you can click the buttons!
+        phoneScreenUI.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        
-        // 5. Stop the player from walking around while on the phone
-        playerController.enabled = false;
+        playerController.enabled = false; // Freeze player
+
+        LoadNode(startingNodeIndex);
     }
 
-    private void SetupButton(Button btn, string choiceText, int scoreChange)
+    private void LoadNode(int nodeIndex)
     {
-        btn.GetComponentInChildren<TextMeshProUGUI>().text = choiceText;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => MakeChoice(scoreChange));
+        // Hide all buttons first
+        foreach (Button btn in choiceButtons)
+        {
+            btn.gameObject.SetActive(false);
+        }
+
+        StoryNode currentNode = storyNodes[nodeIndex];
+        senderNameText.text = currentNode.senderName;
+        
+        // Start the realistic typing effect
+        StopAllCoroutines();
+        StartCoroutine(TypewriterEffect(currentNode.messageText, currentNode.choices));
     }
 
-    public void MakeChoice(int scoreChange)
+    private IEnumerator TypewriterEffect(string textToType, Choice[] currentChoices)
     {
-        Debug.Log("Choice selected! Score changed by: " + scoreChange);
+        messageText.text = ""; // Clear old text
         
-        // Phase 5: This is where we tell the Line Renderer to draw a path!
-        riskPath.AddDecisionPoint(scoreChange); // <--- WE ADDED THIS FOR PHASE 5!
-        
-        CloseScenario();
+        // Type out each letter one by one for realism
+        foreach (char letter in textToType.ToCharArray())
+        {
+            messageText.text += letter;
+            yield return new WaitForSeconds(0.02f); // Typing speed
+        }
+
+        // Once typing is done, show the correct amount of buttons!
+        for (int i = 0; i < currentChoices.Length; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(true);
+            
+            // Set button text
+            choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = currentChoices[i].choiceText;
+            
+            // Wire up the button's click event dynamically
+            int choiceIndex = i; // Store locally for the listener
+            choiceButtons[i].onClick.RemoveAllListeners();
+            choiceButtons[i].onClick.AddListener(() => OnChoiceMade(currentChoices[choiceIndex]));
+        }
     }
 
-    private void CloseScenario()
+    private void OnChoiceMade(Choice selectedChoice)
+    {
+        // 1. Update Score and Hologram
+        currentScore += selectedChoice.scoreChange;
+        riskPath.AddDecisionPoint(selectedChoice.scoreChange);
+
+        // 2. Check for Environmental Shifts (Phase 3 Prep)
+        if (selectedChoice.triggerPanicMode)
+        {
+            Debug.Log("PANIC MODE TRIGGERED! The world goes dark...");
+            // We will add the audio and light shifts here in Phase 3!
+        }
+        else if (selectedChoice.triggerResolution)
+        {
+            Debug.Log("RESOLUTION TRIGGERED! The world is safe.");
+        }
+
+        // 3. Go to next node OR close the phone
+        if (selectedChoice.nextNodeIndex == -1)
+        {
+            ClosePhone();
+        }
+        else
+        {
+            LoadNode(selectedChoice.nextNodeIndex);
+        }
+    }
+
+    private void ClosePhone()
     {
         phoneScreenUI.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        playerController.enabled = true; // Let the player walk again
+        playerController.enabled = true;
     }
 }

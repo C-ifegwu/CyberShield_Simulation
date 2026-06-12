@@ -36,8 +36,8 @@ public class RaycastInteraction : MonoBehaviour
             // 4. Did the object we hit have the "Interactable" tag?
             if (hit.collider.CompareTag("Interactable"))
             {
-                // 5. Open the Scenario UI!
-                scenarioManager.OpenSextortionScenario();
+                // 5. Trigger the new Story Engine! Start at Node 0.
+                scenarioManager.StartStory(0);
             }
         }
     }
