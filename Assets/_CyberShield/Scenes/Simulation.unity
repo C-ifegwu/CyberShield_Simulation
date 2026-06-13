@@ -4383,26 +4383,14 @@ GameObject:
   m_Component:
   - component: {fileID: 120218112}
   - component: {fileID: 120218111}
-  - component: {fileID: 120218110}
+  - component: {fileID: 120218113}
   m_Layer: 0
-  m_Name: RiskPathHologram
+  m_Name: BurningFuseTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &120218110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120218109}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b02076c3385fe64e9f37eaf021c1187, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RiskPathManager
 --- !u!120 &120218111
 LineRenderer:
   serializedVersion: 3
@@ -4521,13 +4509,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 120218109}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.39, y: 1.31, z: 12.52}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1587051488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &120218113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120218109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5848e7eb3aaa6254a8f54e2feaf550e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PanicTimer
+  timeLimit: 60
+  maxRadius: 15
+  segments: 50
 --- !u!1001 &120607072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6407,7 +6410,7 @@ MonoBehaviour:
   - {fileID: 786591922}
   - {fileID: 780259304}
   playerController: {fileID: 1587051483}
-  riskPath: {fileID: 120218110}
+  panicTimer: {fileID: 120218113}
   envManager: {fileID: 170898528}
   storyNodes:
   - senderName: Unknown Number
@@ -54269,6 +54272,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1704015174}
+  - {fileID: 120218112}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1587051489
@@ -74808,4 +74812,3 @@ SceneRoots:
   - {fileID: 1031159386}
   - {fileID: 1584381310}
   - {fileID: 170898527}
-  - {fileID: 120218112}

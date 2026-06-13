@@ -13,10 +13,12 @@ public class ScenarioManager : MonoBehaviour
 
     [Header("Player & World References")]
     public FirstPersonController playerController;
-    public RiskPathManager riskPath;
+    
+    [Header("Panic Mechanics")]
+    public PanicTimer panicTimer; // WE REPLACED THE RISK PATH WITH THE FUSE!
     
     [Header("Cinematics")]
-    public EnvironmentManager envManager; // Phase 3 Cinematic Link
+    public EnvironmentManager envManager; 
 
     [Header("The Story Nodes")]
     public StoryNode[] storyNodes; 
@@ -73,18 +75,23 @@ public class ScenarioManager : MonoBehaviour
     private void OnChoiceMade(Choice selectedChoice)
     {
         currentScore += selectedChoice.scoreChange;
-        riskPath.AddDecisionPoint(selectedChoice.scoreChange);
 
-        // --- PHASE 3 FIX: ACTUALLY TRIGGERING THE CINEMATICS ---
+        // --- THE FULLY BAKED CINEMATIC TRIGGER ---
         if (selectedChoice.triggerPanicMode)
         {
-            envManager.TriggerPanic(); // Drops the lights, starts the heartbeat!
+            envManager.TriggerPanic(); // Drops lights, starts heartbeat
+            panicTimer.StartCountdown(); // Lights the 60-second fuse!
+            
+            ClosePhone(); // Force the phone shut so they HAVE to run!
+            return; // Stop reading code so the next node doesn't load
         }
         else if (selectedChoice.triggerResolution)
         {
-            envManager.TriggerResolution(); // Brings the sun back, stops heartbeat!
+            envManager.TriggerResolution(); 
+            panicTimer.StopCountdown();
         }
 
+        // Normal flow if panic wasn't triggered
         if (selectedChoice.nextNodeIndex == -1)
         {
             ClosePhone();
