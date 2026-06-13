@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System.Collections; // Required for the Typewriter effect
+using System.Collections;
 
 public class ScenarioManager : MonoBehaviour
 {
@@ -9,34 +9,34 @@ public class ScenarioManager : MonoBehaviour
     public GameObject phoneScreenUI;
     public TextMeshProUGUI senderNameText;
     public TextMeshProUGUI messageText;
-    public Button[] choiceButtons; // Array to hold our 3 buttons
+    public Button[] choiceButtons; 
 
     [Header("Player & World References")]
     public FirstPersonController playerController;
     public RiskPathManager riskPath;
     
+    [Header("Cinematics")]
+    public EnvironmentManager envManager; // Phase 3 Cinematic Link
+
     [Header("The Story Nodes")]
-    public StoryNode[] storyNodes; // This holds our entire branching story!
+    public StoryNode[] storyNodes; 
     
     private int currentScore = 0;
 
-    // Triggered by the Raycast!
     public void StartStory(int startingNodeIndex)
     {
-        // THE FIX: If the phone UI is already open, ignore the laser pointer!
         if (phoneScreenUI.activeInHierarchy) return; 
 
         phoneScreenUI.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        playerController.enabled = false; // Freeze player
+        playerController.enabled = false; 
 
         LoadNode(startingNodeIndex);
     }
 
     private void LoadNode(int nodeIndex)
     {
-        // Hide all buttons first
         foreach (Button btn in choiceButtons)
         {
             btn.gameObject.SetActive(false);
@@ -45,32 +45,26 @@ public class ScenarioManager : MonoBehaviour
         StoryNode currentNode = storyNodes[nodeIndex];
         senderNameText.text = currentNode.senderName;
         
-        // Start the realistic typing effect
         StopAllCoroutines();
         StartCoroutine(TypewriterEffect(currentNode.messageText, currentNode.choices));
     }
 
     private IEnumerator TypewriterEffect(string textToType, Choice[] currentChoices)
     {
-        messageText.text = ""; // Clear old text
+        messageText.text = ""; 
         
-        // Type out each letter one by one for realism
         foreach (char letter in textToType.ToCharArray())
         {
             messageText.text += letter;
-            yield return new WaitForSeconds(0.02f); // Typing speed
+            yield return new WaitForSeconds(0.02f); 
         }
 
-        // Once typing is done, show the correct amount of buttons!
         for (int i = 0; i < currentChoices.Length; i++)
         {
             choiceButtons[i].gameObject.SetActive(true);
-            
-            // Set button text
             choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = currentChoices[i].choiceText;
             
-            // Wire up the button's click event dynamically
-            int choiceIndex = i; // Store locally for the listener
+            int choiceIndex = i; 
             choiceButtons[i].onClick.RemoveAllListeners();
             choiceButtons[i].onClick.AddListener(() => OnChoiceMade(currentChoices[choiceIndex]));
         }
@@ -78,22 +72,19 @@ public class ScenarioManager : MonoBehaviour
 
     private void OnChoiceMade(Choice selectedChoice)
     {
-        // 1. Update Score and Hologram
         currentScore += selectedChoice.scoreChange;
         riskPath.AddDecisionPoint(selectedChoice.scoreChange);
 
-        // 2. Check for Environmental Shifts (Phase 3 Prep)
+        // --- PHASE 3 FIX: ACTUALLY TRIGGERING THE CINEMATICS ---
         if (selectedChoice.triggerPanicMode)
         {
-            Debug.Log("PANIC MODE TRIGGERED! The world goes dark...");
-            // We will add the audio and light shifts here in Phase 3!
+            envManager.TriggerPanic(); // Drops the lights, starts the heartbeat!
         }
         else if (selectedChoice.triggerResolution)
         {
-            Debug.Log("RESOLUTION TRIGGERED! The world is safe.");
+            envManager.TriggerResolution(); // Brings the sun back, stops heartbeat!
         }
 
-        // 3. Go to next node OR close the phone
         if (selectedChoice.nextNodeIndex == -1)
         {
             ClosePhone();
