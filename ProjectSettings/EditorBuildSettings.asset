@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_CyberShield/Scenes/MainMenu.unity
+    path: Assets/_CyberShield/Scenes/MainMenuScene.unity
     guid: 72e96ebdbb9059346ae253bb253ec48d
   - enabled: 1
     path: Assets/_CyberShield/Scenes/Simulation.unity
