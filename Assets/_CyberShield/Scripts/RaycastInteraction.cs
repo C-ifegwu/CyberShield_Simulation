@@ -33,11 +33,16 @@ public class RaycastInteraction : MonoBehaviour
         // 3. Actually shoot the raycast and see if it hits a collider within our distance
         if (Physics.Raycast(ray, out hit, interactDistance))
         {
-            // 4. Did the object we hit have the "Interactable" tag?
             if (hit.collider.CompareTag("Interactable"))
             {
-                // 5. Trigger the new Story Engine! Start at Node 0.
-                scenarioManager.StartStory(0);
+                // Look for the PhoneData script on the phone we just clicked
+                PhoneData phone = hit.collider.GetComponent<PhoneData>();
+                
+                if (phone != null)
+                {
+                    // Start the story at the exact node this specific phone asks for!
+                    scenarioManager.StartStory(phone.startingNode);
+                }
             }
         }
     }
