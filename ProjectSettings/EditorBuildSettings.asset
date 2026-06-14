@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/_CyberShield/Scenes/Simulation.unity
     guid: ac06336ed7eac0e48bad53f503b7a028
   - enabled: 1
-    path: Assets/_CyberShield/Scenes/Results.unity
+    path: Assets/_CyberShield/Scenes/ResultsScene.unity
     guid: a924d1e4420d68c44993d570c1b8cad5
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
