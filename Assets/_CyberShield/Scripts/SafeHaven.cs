@@ -1,5 +1,5 @@
 using UnityEngine;
-// using UnityEngine.SceneManagement; // We will uncomment this in Phase 4!
+using UnityEngine.SceneManagement;
 
 public class SafeHaven : MonoBehaviour
 {
@@ -31,9 +31,8 @@ public class SafeHaven : MonoBehaviour
             // 3. Save the score permanently (Prep for our final Results screen)
             int currentScore = PlayerPrefs.GetInt("TotalScore", 0);
             PlayerPrefs.SetInt("TotalScore", currentScore + survivalBonus);
+            SceneManager.LoadScene("ResultsScene");
 
-            // 4. In Phase 4, we will load the final Results Screen right here!
-            // SceneManager.LoadScene(2); 
         }
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(LineRenderer))]
 public class PanicTimer : MonoBehaviour
@@ -56,7 +57,8 @@ public class PanicTimer : MonoBehaviour
             {
                 isTimerRunning = false;
                 Debug.Log("TIME IS UP! SCAMMER EXPOSED YOU. GAME OVER.");
-                // We will load the Game Over screen here in Phase 4!
+                PlayerPrefs.SetInt("TotalScore", -500); // Massive penalty for failing to run!
+                SceneManager.LoadScene("ResultsScene");
             }
         }
     }
