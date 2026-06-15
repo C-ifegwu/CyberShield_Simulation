@@ -15,7 +15,7 @@ public class RiskPathManager : MonoBehaviour
         lineRenderer.SetPosition(0, currentPosition);
     }
 
-    // This function will be called by our UI Buttons!
+    // This method is called whenever the player makes a decision that affects their risk score. It updates the line renderer to visually represent the player's path through the scenario.
     public void AddDecisionPoint(int scoreChange)
     {
         currentStep++; // Move to the next step in the timeline

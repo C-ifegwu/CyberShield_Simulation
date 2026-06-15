@@ -6,15 +6,15 @@ public class RaycastInteraction : MonoBehaviour
     private PlayerControls controls;
     
     [Header("Raycast Settings")]
-    public float interactDistance = 5f; // How far the laser reaches
-    public Camera mainCamera; // Where the laser shoots from
-    public ScenarioManager scenarioManager; // Reference to the Scenario Manager
+    public float interactDistance = 5f; // How far can the player interact with objects? Adjust this to fit your scene!
+    public Camera mainCamera; //Reference to the player's camera, so we know where to shoot the ray from and in which direction
+    public ScenarioManager scenarioManager; // Reference to the ScenarioManager so we can trigger story events when the player interacts with phones
 
     private void Awake()
     {
         controls = new PlayerControls();
         
-        // Listen for the exact moment the Left Mouse Button is clicked
+        // Set up our input callback for the Interact action, which will trigger our ShootLaser method whenever the player presses the interact button (default is left mouse click)
         controls.Player.Interact.performed += ctx => ShootLaser();
     }
 
@@ -23,7 +23,7 @@ public class RaycastInteraction : MonoBehaviour
 
     private void ShootLaser()
     {
-        // 1. Create the invisible ray starting from the camera and pointing dead ahead
+        // 1. Create a ray that starts at the camera's position and points forward in the direction the camera is facing
         Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         RaycastHit hit;
 

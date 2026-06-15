@@ -10,7 +10,7 @@ public class TriggerZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player entered: " + scenarioName);
-            // We will add the logic to open the UI here in Phase 4!
+            // Here you can add code to trigger the scenario, such as calling a method on the ScenarioManager or starting a cutscene.
         }
     }
 }

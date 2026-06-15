@@ -15,7 +15,7 @@ public class ScenarioManager : MonoBehaviour
     public FirstPersonController playerController;
     
     [Header("Panic Mechanics")]
-    public PanicTimer panicTimer; // WE REPLACED THE RISK PATH WITH THE FUSE!
+    public PanicTimer panicTimer; // Reference to the panic timer so we can start and stop the countdown
     
     [Header("Cinematics")]
     public EnvironmentManager envManager; 
@@ -76,7 +76,7 @@ public class ScenarioManager : MonoBehaviour
     {
         currentScore += selectedChoice.scoreChange;
 
-        // --- THE FULLY BAKED CINEMATIC TRIGGER ---
+        // If the choice triggers panic mode, we need to start the countdown and trigger the environmental changes. If it triggers resolution, we stop the countdown and restore the environment.
         if (selectedChoice.triggerPanicMode)
         {
             envManager.TriggerPanic(); // Drops lights, starts heartbeat
@@ -91,7 +91,7 @@ public class ScenarioManager : MonoBehaviour
             panicTimer.StopCountdown();
         }
 
-        // Normal flow if panic wasn't triggered
+        // If the next node index is -1, we close the phone and return to gameplay. Otherwise, we load the next story node.
         if (selectedChoice.nextNodeIndex == -1)
         {
             ClosePhone();

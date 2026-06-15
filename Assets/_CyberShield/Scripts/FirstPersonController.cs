@@ -20,7 +20,7 @@ public class FirstPersonController : MonoBehaviour
         controls = new PlayerControls();
         controller = GetComponent<CharacterController>();
 
-        // Link the inputs you made in Step 2 to our code variables
+        // Set up our input callbacks for movement and looking around
         controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
 
@@ -33,7 +33,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Start()
     {
-        // Lock the cursor to the center of the screen
+        // Locks the cursor to the center of the screen and makes it invisible for a true first-person experience
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -45,10 +45,10 @@ public class FirstPersonController : MonoBehaviour
 
     private void MovePlayer()
     {
-        // Move based on where the player is facing
+        // Calculate movement direction based on input and player orientation
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         
-        // Apply gravity so we don't float
+        // Apply gravity to keep the player grounded (you can expand this with jumping later!)
         move.y = -9.81f; 
 
         controller.Move(move * speed * Time.deltaTime);
@@ -60,7 +60,7 @@ public class FirstPersonController : MonoBehaviour
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Prevents neck-snapping past 90 degrees
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Prevents the player from looking too far up or down
 
         cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);

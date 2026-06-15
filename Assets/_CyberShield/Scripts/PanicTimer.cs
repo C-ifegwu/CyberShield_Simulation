@@ -7,20 +7,20 @@ public class PanicTimer : MonoBehaviour
     private LineRenderer lineRenderer;
     
     [Header("Fuse Settings")]
-    public float timeLimit = 60f; // 60 seconds to find the Police Station!
+    public float timeLimit = 60f; // How long does the player have to run before the scammer catches them?
     private float currentTime;
     private bool isTimerRunning = false;
 
     [Header("Visuals")]
-    public float maxRadius = 15f; // Starts huge, like a wide net
-    public int segments = 50; // Makes the circle smooth
+    public float maxRadius = 15f; // How big should the panic circle be at the start? Adjust this to fit your scene!
+    public int segments = 50; // How smooth should the circle look? More segments = smoother but more performance cost.
 
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = segments + 1;
         lineRenderer.useWorldSpace = false;
-        lineRenderer.enabled = false; // Hide it until the panic starts
+        lineRenderer.enabled = false; // Start with the circle hidden until the timer starts
         
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
@@ -45,10 +45,10 @@ public class PanicTimer : MonoBehaviour
         {
             currentTime -= Time.deltaTime;
 
-            // Calculate percentage of time left (1.0 down to 0.0)
+            // Calculate how much time is left as a percentage of the total time limit
             float timePercent = currentTime / timeLimit; 
             
-            // The circle physically shrinks as time runs out!
+            // The radius of the circle should shrink as time runs out, creating a sense of urgency. When timePercent is 1 (full time), the radius is maxRadius. When timePercent is 0 (time's up), the radius is 0.
             float currentRadius = maxRadius * timePercent;
 
             DrawCircle(currentRadius);
@@ -57,7 +57,7 @@ public class PanicTimer : MonoBehaviour
             {
                 isTimerRunning = false;
                 Debug.Log("TIME IS UP! SCAMMER EXPOSED YOU. GAME OVER.");
-                PlayerPrefs.SetInt("TotalScore", -500); // Massive penalty for failing to run!
+                PlayerPrefs.SetInt("TotalScore", -500); // Harsh penalty for getting caught, but it will be interesting to see on the Results screen!
                 SceneManager.LoadScene("ResultsScene");
             }
         }

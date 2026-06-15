@@ -13,7 +13,7 @@ public class Choice
 [System.Serializable]
 public class StoryNode
 {
-    public string senderName; // E.g., "Unknown Number", "School Group Chat"
+    public string senderName; // Who is sending this message? (e.g. "Mom", "Boss", "Unknown Caller")
     
     [TextArea(3, 5)] // This makes the text box bigger in the Unity Inspector
     public string messageText;

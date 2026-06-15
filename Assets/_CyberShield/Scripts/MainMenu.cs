@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        // Loads the City Scene (make sure you spell your city scene name perfectly here!)
-        SceneManager.LoadScene("CityScene"); // CHANGE "CityScene" to whatever your city scene is actually named!
+        // Loads the scene called "Simulation" when the player clicks the Play button in the main menu
+        SceneManager.LoadScene("Simulation");
     }
 }

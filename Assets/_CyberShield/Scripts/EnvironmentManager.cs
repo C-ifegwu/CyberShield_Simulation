@@ -6,7 +6,7 @@ public class EnvironmentManager : MonoBehaviour
     [Header("Environment References")]
     public Light sunLight;
     public AudioSource heartbeatAudio;
-    public AudioSource bgmAudio; // NEW: The Calming Music
+    public AudioSource bgmAudio; // NEW: Reference to the background music audio source
 
     [Header("Atmosphere Settings")]
     public float normalIntensity = 1f;
@@ -16,15 +16,15 @@ public class EnvironmentManager : MonoBehaviour
     public Color panicColor = new Color(0.8f, 0.2f, 0.2f); 
     
     [Header("Audio Volume Settings")]
-    public float maxBgmVolume = 0.4f; // Normal music volume
-    public float maxHeartbeatVolume = 1.0f; // Max panic volume
+    public float maxBgmVolume = 0.4f; // Max music volume during normal state
+    public float maxHeartbeatVolume = 1.0f; // Max heartbeat volume during panic state
 
     public void TriggerPanic()
     {
         StopAllCoroutines();
         heartbeatAudio.Play();
         
-        // Fades TO: Dark Sky, Red Light, Loud Heartbeat, ZERO Music
+        // Fades TO: Red Sky, Dim Light, LOUD Heartbeat, Muffled Music
         StartCoroutine(TransitionAtmosphere(panicIntensity, panicColor, maxHeartbeatVolume, 0f));
     }
     
@@ -43,7 +43,7 @@ public class EnvironmentManager : MonoBehaviour
         float startLight = sunLight.intensity;
         Color startColor = sunLight.color;
         float startHeartbeat = heartbeatAudio.volume;
-        float startBgm = bgmAudio.volume; // Capture current music volume
+        float startBgm = bgmAudio.volume; // NEW: Store the starting volume of the background music
         
         float time = 0;
         while (time < duration)
@@ -51,7 +51,7 @@ public class EnvironmentManager : MonoBehaviour
             time += Time.deltaTime;
             float percent = time / duration;
             
-            // Smoothly blend the lights AND the two audio tracks simultaneously 
+            // Lerp all the things! Smoothly transition from the current state to the target state over time.
             sunLight.intensity = Mathf.Lerp(startLight, targetLight, percent);
             sunLight.color = Color.Lerp(startColor, targetColor, percent);
             heartbeatAudio.volume = Mathf.Lerp(startHeartbeat, targetHeartbeat, percent);

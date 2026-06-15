@@ -6,16 +6,16 @@ public class ProximityDoor : MonoBehaviour
 
     void Start()
     {
-        // Grabs the Animator component attached to this door
+        // Get the Animator component attached to the same GameObject as this script
         doorAnimator = GetComponent<Animator>();
     }
 
-    // This runs the exact frame the player touches your green Box Collider
+    // This runs when the player walks into the green Box Collider
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Flips the Animator switch to True!
+            // Flips the Animator switch to True, opening the door!
             doorAnimator.SetBool("isOpen", true);
         }
     }
@@ -25,7 +25,7 @@ public class ProximityDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Flips the Animator switch to False, closing the door!
+            // Flips the Animator switch back to False, closing the door!
             doorAnimator.SetBool("isOpen", false);
         }
     }
