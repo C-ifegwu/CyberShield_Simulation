@@ -1,57 +1,54 @@
 # CyberShield Simulator
 
 **Developer:** Victor Ifegwu  
-**Program:** ALU Software Engineering
+**Program:** ALU / ALX Software Engineering
 
 🎮 **PLAY THE SIMULATION LIVE:** [CyberShield WebGL Build](https://play.unity.com/en/games/559b7670-6eda-47ea-9f69-c0493d1e6763/cybershieldwebbuild)
 
-## 📖 Overview
+## 🌍 GCGO Statement & Problem Context
 
-**CyberShield Simulator** is a 3D psychological and educational serious game built in Unity. It is designed to teach players—specifically teenagers—how to identify, manage, and escape real-world digital threats like sextortion and cyberbullying.
+**GCGO:** Digital Safety and Youth Mental Wellbeing.
 
-Rather than simply clicking through a quiz, players are dropped into a first-person environment. They must interact with digital interfaces, experience the psychological stress of being targeted, and learn that the only way to escape an online trap is through physical, real-world action (seeking help from trusted authorities).
+**The Problem:** The dramatic rise in teenage sextortion and cyberbullying. Young people targeted by digital threats often feel entirely trapped inside their devices, leading them to attempt to handle extortion or mob harassment alone. This isolation often results in severe mental health crises.
+**The Solution:** This simulation gamifies the trap of online extortion, educating users on the mechanics of cyber-threats while reinforcing the only actionable solution: stepping away from the screen and seeking real-world help from trusted authorities.
 
-## ✨ Core Features
+## 📖 Simulation Overview
 
-- **Dual-Scenario Open World:** Features two distinct threat scenarios located in different areas of the city (Sextortion in the bedroom, Cyberbullying in the cafe).
-- **Node-Based Narrative Engine:** A custom-built, interactive smartphone UI that types out messages dynamically and branches based on player choices.
-- **Psychological Cinematics:** When a trap is sprung, the game strips away the player's comfort. Soothing background music fades into a deafening heartbeat, and the bright city lighting plunges into a claustrophobic red eclipse.
-- **The "Burning Fuse" Timer:** Utilizing a dynamic mathematical Line Renderer, a glowing red circle wraps around the player and shrinks inwards, acting as a terrifying 60-second countdown timer.
-- **Physical Safe Havens:** Players cannot "block" or "ignore" their way out of the late-stage traps. They must physically navigate the 3D space to find invisible trigger zones at the Police Station or Counselor's Office to survive.
+**CyberShield Simulator** is a 3D first-person serious game designed for teenagers. Rather than a standard quiz, players are dropped into a 3D environment (a bedroom and a cafe). They must interact with digital interfaces (smartphones) and navigate branching text narratives. Once a digital trap is sprung (Sextortion or Cyberbullying), the environment becomes hostile, and a shrinking timer forces the player to physically run to a Safe Haven (Police Station or Counselor's Office) to survive.
 
-## 🎮 Controls
+## ⚙️ Unity Mechanics Implemented
 
-This project utilizes the **New Unity Input System**.
+- **New Unity Input System:** Used exclusively for all player movement (WASD) and UI/Raycast interactions, ensuring cross-platform compatibility without legacy input code.
+- **User Interface (UI):** Utilized TextMeshPro panels and dynamic buttons to create a branching, node-based smartphone messaging system.
+- **Scripting:** Built modular C# architecture, including a custom `ScenarioManager` to handle array-based data structures for the narrative, and `EnvironmentManager` to handle asynchronous coroutines.
+- **Raycasting:** Fired `Physics.Raycast` from the camera center to detect 3D smartphones and trigger the UI storylines via a `PhoneData` component.
+- **Collision:** Placed Box Colliders set to `Is Trigger` on Safe Havens. Used `OnTriggerEnter` to detect the player, stop the panic timer, and resolve the game loop.
+- **Line Renderer:** Programmed a dynamic, 50-point mathematical circle using `Mathf.Sin` and `Mathf.Cos` that acts as a physical, shrinking "fuse" timer around the player during Panic Mode.
 
-- **W, A, S, D** - Move player
-- **Mouse** - Look around / Aim Raycast
-- **Left Mouse Button** - Interact with objects (Smartphones, UI Buttons)
+## 🚀 Additional Features (Beyond Module Scope)
 
-## 🏗️ Technical Architecture
+To elevate the technical quality of the simulation, I implemented four features outside the standard curriculum:
 
-- **Language:** C#
-- **Engine:** Unity 6 (Universal Render Pipeline)
-- **Key Scripts:**
-  - `ScenarioManager.cs` - Handles the node arrays and UI typewriter effects.
-  - `EnvironmentManager.cs` - Manages lighting shifts and audio crossfades via Coroutines.
-  - `PanicTimer.cs` - Handles the trigonometric math for the shrinking Line Renderer.
-  - `RaycastInteraction.cs` - Manages center-screen physics raycasting to detect interactables.
+1. **Audio Crossfading (Coroutines):** Used C# `IEnumerator` and `Mathf.Lerp` to smoothly crossfade peaceful background music into a stressful heartbeat audio source without pausing the game thread.
+2. **Animation State Machines:** Mapped boolean parameters (`isOpen`) to Animator transitions, using a `ProximityDoor` script to automatically animate doors opening when the player approaches.
+3. **Data Persistence:** Utilized `PlayerPrefs` to save the player's survival score in the City Scene and retrieve it to display dynamic educational messaging in the Results Scene.
+4. **Advanced Scene Management:** Created a fully looping application with a Main Menu, City Scene, and End Screen.
+
+## 🛠️ Build Information & Instructions
+
+- **WebGL Deployment:** [Click Here to Play](https://play.unity.com/en/games/559b7670-6eda-47ea-9f69-c0493d1e6763/cybershieldwebbuild)
+- **Android Build (APK):** Included in the submission `.zip` file as `CyberShieldApp.apk`.
+
+**How to Run the Project:**
+
+- **Browser:** Click the WebGL link above. Use Mouse to look around, WASD to move, and Left Click to interact with phones and UI buttons.
+- **Android:** Transfer the `.apk` file to an Android device. Enable "Install from unknown sources" in your security settings, install the app, and tap the icon to play. Use the touchscreen joystick to move and tap the center of the screen to interact.
+
+## 🧠 Reflection
+
+Building this simulation bridged the gap between theoretical C# programming and interactive user psychology. The most challenging aspect was mastering asynchronous operations (Coroutines) to manipulate the environment's lighting and audio smoothly, and ensuring the Android package identification was properly configured in the Build Settings. By strictly implementing the New Unity Input System and decoupled raycast logic, I learned how to build scalable architecture. Ultimately, this project successfully demonstrates how Unity can be used as a powerful educational tool to combat real-world digital dangers.
 
 ## 📜 Credits & Asset Attribution
 
-This project was brought to life using the following royalty-free assets and audio tracks:
-
-**Audio:**
-
-- **Background Music:** [Luminous Tranquility](https://pixabay.com/music/meditationspiritual-luminous-tranquility-531191/) by Pixabay
-- **SFX:** [People Heartbeat](https://pixabay.com/sound-effects/people-hearbeat-71701/) by Pixabay
-
-**3D Models & Environments:**
-
-- **City Environment:** [SimplePoly City - Low Poly Assets](https://assetstore.unity.com/packages/3d/environments/simplepoly-city-low-poly-assets-58899)
-- **Bedroom Interior:** [Furnished Cabin](https://assetstore.unity.com/packages/3d/environments/urban/furnished-cabin-71426)
-- **Interactable Prop:** [Free Phone](https://assetstore.unity.com/packages/3d/props/free-phone-181455)
-
----
-
-_Built as a functional prototype for educational and simulation purposes._
+- **Audio:** [Luminous Tranquility](https://pixabay.com/music/meditationspiritual-luminous-tranquility-531191/) & [People Heartbeat](https://pixabay.com/sound-effects/people-hearbeat-71701/) by Pixabay.
+- **3D Models:** [SimplePoly City](https://assetstore.unity.com/packages/3d/environments/simplepoly-city-low-poly-assets-58899), [Furnished Cabin](https://assetstore.unity.com/packages/3d/environments/urban/furnished-cabin-71426), [Free Phone](https://assetstore.unity.com/packages/3d/props/free-phone-181455) from the Unity Asset Store.
