@@ -1,7 +1,7 @@
 # CyberShield Simulator
 
-**Developer:** Victor Ifegwu  
-**Program:** ALU / ALX Software Engineering
+**Developer:** Chibueze Victor Ifegwu  
+**Program:** ALU Software Engineering
 
 🎮 **PLAY THE SIMULATION LIVE:** [CyberShield WebGL Build](https://play.unity.com/en/games/559b7670-6eda-47ea-9f69-c0493d1e6763/cybershieldwebbuild)
 
